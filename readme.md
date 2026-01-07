@@ -1,5 +1,13 @@
 # Campus Connect - Project README
 
+Developers of this Project :
+1. Aditya Vishwakarma - 44
+2. Soniya Yadav - 59
+3. Ankita Yadav - 49
+
+Project Guide : 
+Amitanand Mishra
+
 ## Sprint-Based Development Guide
 
 ---
