@@ -1,0 +1,311 @@
+Campus Connect – A Web-Based Campus Communication Platform
+Introduction
+Campus Connect is a comprehensive web-based digital communication and academic management platform designed to streamline information sharing, enhance collaboration, and modernize campus operations within college and university environments. In traditional campus settings, communication between students, faculty members, and administrators often relies on fragmented channels such as physical notice boards, emails, or informal messaging groups, leading to inefficiency, disorganization, and delayed information dissemination. Campus Connect addresses these challenges by providing a centralized, secure, and real-time web application that ensures important academic and administrative information reaches all stakeholders instantly.
+The platform is developed as a fully responsive web application, accessible seamlessly from desktops, laptops, and mobile browsers. There is no native mobile application; instead, mobile users are redirected to the same web interface, ensuring uniformity, ease of maintenance, and consistent user experience across all devices.
+
+Problem Statement
+In many educational institutions, the flow of information is fragmented, inconsistent, and inefficient. Physical notice boards require students to be physically present on campus, emails often get overlooked or buried in crowded inboxes, and messaging platforms like WhatsApp become cluttered and unmanageable over time. These traditional methods result in:
+
+Missed announcements and critical updates
+Delayed communication between faculty and students
+Poor coordination between departments
+Lack of centralized academic resource management
+Difficulty in tracking student attendance and engagement
+Inefficient collaboration and peer-to-peer interaction
+
+There is a clear and urgent need for a single, integrated digital system that can handle campus-wide communication efficiently, provide real-time updates, support organized interaction between students and faculty, and facilitate academic resource sharing—all within a secure and user-friendly environment.
+
+Objectives of the Project
+The primary objectives of the Campus Connect project are:
+
+Centralized Communication Hub: Create a unified web platform for all campus-related announcements, notifications, and updates.
+Real-Time Notifications: Provide instant announcements and notifications for academic and administrative updates using in-app alerts and Firebase Cloud Messaging (FCM).
+Secure Role-Based Access: Implement secure authentication and authorization with role-based access control for Admin, Faculty, and Students using JWT tokens.
+Real-Time Communication: Enable instant messaging through WebSocket-based chat functionality, including department group chats and one-to-one conversations.
+Academic Resource Management: Facilitate organized sharing and access to study materials, lecture notes, and academic resources through a dedicated repository system.
+Attendance Tracking: Provide faculty with tools to mark, track, and analyze student attendance with detailed reports and insights.
+Reduce Dependency on Legacy Systems: Minimize reliance on physical notice boards, unstructured messaging platforms, and scattered email communication.
+Scalability and Future Integration: Design the platform with scalability in mind, allowing future integration with college ERP systems, advanced analytics, and AI-based features.
+
+
+Proposed Solution
+Campus Connect offers a comprehensive solution by integrating modern web technologies with a robust backend system. The platform empowers administrators and faculty members to post announcements, share study materials, track attendance, and communicate with students through a secure and intuitive interface. Students can view updates instantly on their dashboards, access study materials, participate in departmental chats, and communicate directly with faculty—all in real-time.
+The system includes:
+
+Real-time chat functionality using WebSocket technology (STOMP over SockJS), enabling instant communication within departments and between students and faculty members.
+Dual notification mechanism combining in-app notifications and Firebase Cloud Messaging (FCM) for browser and mobile web alerts.
+Study Material Repository for organized storage, categorization, and access to academic resources.
+Attendance Management System for faculty to mark, track, and generate attendance reports.
+Secure file handling for announcements, chat attachments, and study materials stored locally on the server.
+
+
+System Architecture
+Frontend (React JS Web Application)
+The frontend of Campus Connect is developed using React JS, providing a fast, responsive, and interactive user interface. The application follows responsive design principles, ensuring seamless usability across desktops, tablets, and mobile browsers. The frontend utilizes Context API for global state management, ensuring efficient data flow and minimal prop drilling.
+Key frontend features include:
+
+Role-based dashboards for Admin, Faculty, and Students with customized views
+Announcement viewing and filtering modules
+Study Material Repository interface with search and categorization
+Real-time chat interface with department group chats and one-to-one messaging
+Attendance tracking and viewing (faculty and student views)
+In-app notification display with read/unread status
+Profile management with profile picture upload
+Dark mode support for enhanced user experience
+Secure authentication handling using JWT tokens with refresh token mechanism
+Responsive design optimized for all screen sizes
+
+
+Backend (Spring Boot)
+The backend is developed using Spring Boot, which handles all business logic, security, data management, and API services. The backend follows a layered architecture with clear separation of concerns.
+Key backend responsibilities include:
+
+User authentication and authorization using JWT (JSON Web Tokens) with refresh token support
+Role-based access control (RBAC) managed entirely on the backend to ensure security
+RESTful APIs for handling announcements, events, users, notifications, study materials, and attendance
+WebSocket server (STOMP over SockJS) for real-time chat communication
+File upload and management for announcements, chat attachments, study materials, and profile pictures
+Excel file parsing for bulk user upload with email notifications
+Password reset workflow with admin approval mechanism
+Database interaction using Hibernate ORM and MySQL
+Email service integration for user invitations and password reset links
+
+
+Real-Time Chat Module (WebSocket-Based)
+Campus Connect includes a sophisticated real-time messaging system implemented using WebSocket technology (STOMP over SockJS), enabling bi-directional communication between users without page refresh.
+The chat module consists of:
+
+Department Group Chats:
+
+Faculty + Student Group Chat: Faculty can post messages; students have read-only access for official announcements and updates.
+All Student Group Chat: Students can communicate freely when no faculty is monitoring; becomes read-only when faculty joins.
+
+
+One-to-One Chats:
+
+Student ↔ Student: Direct messaging between students within the same department.
+Faculty ↔ Student: Direct academic interaction for guidance, doubt resolution, and discussions.
+
+
+Chat Features:
+
+Real-time message delivery with low latency
+File sharing capabilities in all chats
+Message history storage for future reference
+Unread message count tracking (database-based for reliability)
+Auto-reconnection handling for dropped connections
+
+
+
+WebSocket ensures instant message delivery and efficient resource usage, making communication reliable and seamless.
+
+Study Material Repository
+The Study Material Repository is a dedicated module designed to organize, store, and distribute academic resources efficiently. This feature enables faculty to upload lecture notes, PDFs, presentations, code files, and other educational materials in an organized manner, while students can easily search, browse, and download these resources.
+Key Features:
+For Faculty:
+
+Upload Study Materials: Upload files (PDFs, PPTs, DOCs, images, videos) with metadata
+Organize by Categories: Categorize materials by:
+
+Subject/Course (e.g., Data Structures, Operating Systems)
+Topic/Unit (e.g., Unit 1: Introduction to Algorithms)
+Type (e.g., Lecture Notes, Lab Manuals, Previous Year Papers, Reference Books)
+
+
+Edit/Delete Materials: Manage their uploaded content
+Set Visibility: Choose whether materials are visible to:
+
+Entire department
+Specific year/semester (optional for future)
+
+
+Track Downloads: View how many times a material has been downloaded
+
+For Students:
+
+Browse Materials: View all study materials uploaded for their department
+Search Functionality: Search by subject, topic, file name, or keywords
+Filter & Sort: Filter by subject, type, upload date; sort by newest, most downloaded, etc.
+Download Resources: Download files for offline access
+Preview (Optional): Preview PDFs and documents before downloading
+
+For Admin:
+
+Full Access: View, edit, and delete materials across all departments
+Monitor Usage: Track upload/download statistics
+Manage Categories: Add/edit subject and topic categories
+
+Technical Implementation:
+
+Files stored locally in organized directory structure: /uploads/study-materials/{department}/{subject}/
+File metadata stored in database (file name, type, size, upload date, uploaded by, category)
+Support for multiple file formats with size limits (e.g., 50MB per file)
+Thumbnail generation for images and PDFs (optional)
+
+
+Attendance Management System
+The platform includes a comprehensive Attendance Management System that enables faculty to efficiently track student attendance and generate insightful reports.
+Key Features:
+For Faculty:
+
+Mark Attendance:
+
+Date-wise attendance marking
+Bulk selection (present/absent)
+Option to mark for specific lectures or full day
+
+
+View Attendance Records:
+
+Student-wise attendance history
+Date-wise attendance records
+Filter by date range, student, or subject
+
+
+Attendance Reports:
+
+Generate attendance percentage reports
+Export reports as Excel or PDF
+View class-wide attendance trends
+
+
+Statistics & Analytics:
+
+Overall class attendance percentage
+Individual student attendance percentage
+Identify students with low attendance
+Monthly/weekly attendance trends
+
+
+
+For Students:
+
+View Own Attendance:
+
+Date-wise attendance history
+Current attendance percentage
+Filter by date range or subject
+Visual representation (graphs/charts)
+
+
+
+For Admin:
+
+System-wide Access: View attendance across all departments
+Generate Reports: Department-wise and faculty-wise attendance reports
+
+
+Notification System
+The platform implements a dual notification mechanism to ensure maximum visibility of important updates:
+1. In-App Notifications:
+
+Notifications are displayed within the application dashboard
+Stored in the database for future reference
+Shows unread count badge
+Supports marking as read/unread
+Persistent across sessions
+
+2. Firebase Cloud Messaging (FCM):
+
+Real-time browser push notifications
+Works even when the application is not open
+Notification click redirects users to the relevant section in Campus Connect
+FCM token management:
+
+Token fetched and stored upon user login
+Token refresh handling for long-term reliability
+Token associated with user account in database
+
+
+
+Notification Triggers:
+
+New announcements posted (department-based)
+New study materials uploaded
+Attendance marked (for students)
+Password reset approvals
+Important system alerts
+
+This dual approach ensures that users never miss critical updates, regardless of whether they are actively using the platform.
+
+Security and Authentication
+Security is a paramount focus of the Campus Connect platform. The system implements multiple layers of security to protect user data and prevent unauthorized access.
+Authentication Mechanism:
+
+JWT (JSON Web Tokens): Secure token-based authentication
+Refresh Token Implementation: Long-lived refresh tokens for session management without frequent re-login
+Access Token Expiry: Short-lived access tokens (e.g., 15 minutes) for enhanced security
+Token Storage: Secure storage in HTTP-only cookies or localStorage with encryption
+
+Authorization:
+
+Role-Based Access Control (RBAC): Enforced entirely on the backend
+API Endpoint Protection: All sensitive APIs require valid JWT and appropriate role
+Admin Impersonation: Secure mechanism allowing admin to view/act as any user for support purposes
+
+Password Management:
+
+Password Reset Flow: User requests reset → Admin approves → System sends secure reset link via email
+Password Hashing: BCrypt hashing for all passwords stored in database
+First-time Login: Users set their own password upon first login after receiving invitation email
+
+Data Protection:
+
+Input Validation: All user inputs validated on both frontend and backend
+SQL Injection Prevention: Parameterized queries and Hibernate ORM
+File Upload Security: File type and size validation, malware scanning (optional)
+CORS Configuration: Restricted cross-origin requests
+
+
+User Management System
+Bulk User Upload (Excel):
+
+Admin uploads Excel files containing user details
+Student Excel Format: Name, Email, Roll Number, Department, Joining Year
+Faculty Excel Format: Name, Email, Department, Designation
+System validates data and checks for duplicates
+On duplicate detection: Throws error and continues processing valid entries
+Automated email invitations sent to all new users
+Users receive login credentials and first-time setup instructions
+
+Manual User Creation:
+
+Admin can manually add individual users through the interface
+Admin accounts are hardcoded in the system for security
+
+Profile Management:
+
+Users can upload and update profile pictures (stored locally)
+Students view: Name, Roll Number, Department, Joining Year
+Faculty view: Name, Department, Designation
+Admin has full visibility and edit access across all profiles
+
+
+Hardware and Software Environment
+Development Environment:
+
+Operating System: Windows, macOS, or Linux
+Hardware Requirements: Standard development machine (4GB+ RAM, modern processor)
+IDE: IntelliJ IDEA / Eclipse (Backend), Visual Studio Code (Frontend)
+
+Software Stack:
+
+Frontend: React JS, Context API, React Router, Axios
+Backend: Spring Boot, Hibernate, MySQL
+Real-Time Communication: STOMP over SockJS
+Notifications: Firebase Cloud Messaging (FCM)
+Build Tools: Maven (Backend), npm/yarn (Frontend)
+Version Control: Git
+
+Database:
+
+MySQL: Relational database for storing users, announcements, chat messages, attendance, study materials, notifications, and system logs
+
+File Storage:
+
+Local file system storage for:
+
+Announcement attachments: /uploads/announcements/
+Chat attachments: /uploads/chats/
+Study materials: /uploads/study-materials/
+Profile pictures: /uploads/profiles/
